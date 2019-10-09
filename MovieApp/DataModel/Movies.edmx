@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MoviesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblMovies">
+          <Key>
+            <PropertyRef Name="MovieID" />
+          </Key>
+          <Property Name="MovieID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MovieName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Year" Type="bigint" />
+          <Property Name="Producer" Type="bigint" />
+          <Property Name="genre" Type="nvarchar" MaxLength="50" />
+          <Property Name="title" Type="nvarchar" MaxLength="50" />
+          <Property Name="review_by" Type="bigint" />
+          <Property Name="user_review" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="tblProducers">
+          <Key>
+            <PropertyRef Name="ProducerID" />
+          </Key>
+          <Property Name="ProducerID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateOfBirth" Type="datetime" />
+          <Property Name="NumberOfMovies" Type="bigint" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsAdmin" Type="bit" />
+        </EntityType>
+        <Association Name="FK_tblMovies_tblProducers">
+          <End Role="tblProducers" Type="Self.tblProducers" Multiplicity="0..1" />
+          <End Role="tblMovies" Type="Self.tblMovies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProducers">
+              <PropertyRef Name="ProducerID" />
+            </Principal>
+            <Dependent Role="tblMovies">
+              <PropertyRef Name="Producer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMovies_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="tblMovies" Type="Self.tblMovies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="tblMovies">
+              <PropertyRef Name="review_by" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MoviesModelStoreContainer">
+          <EntitySet Name="tblMovies" EntityType="Self.tblMovies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblProducers" EntityType="Self.tblProducers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tblMovies_tblProducers" Association="Self.FK_tblMovies_tblProducers">
+            <End Role="tblProducers" EntitySet="tblProducers" />
+            <End Role="tblMovies" EntitySet="tblMovies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMovies_User" Association="Self.FK_tblMovies_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="tblMovies" EntitySet="tblMovies" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MoviesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblMovy">
+          <Key>
+            <PropertyRef Name="MovieID" />
+          </Key>
+          <Property Name="MovieID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MovieName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Year" Type="Int64" />
+          <Property Name="Producer" Type="Int64" />
+          <Property Name="genre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="review_by" Type="Int64" />
+          <Property Name="user_review" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblProducer" Relationship="Self.FK_tblMovies_tblProducers" FromRole="tblMovies" ToRole="tblProducers" />
+          <NavigationProperty Name="User" Relationship="Self.FK_tblMovies_User" FromRole="tblMovies" ToRole="User" />
+        </EntityType>
+        <EntityType Name="tblProducer">
+          <Key>
+            <PropertyRef Name="ProducerID" />
+          </Key>
+          <Property Name="ProducerID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateOfBirth" Type="DateTime" Precision="3" />
+          <Property Name="NumberOfMovies" Type="Int64" />
+          <NavigationProperty Name="tblMovies" Relationship="Self.FK_tblMovies_tblProducers" FromRole="tblProducers" ToRole="tblMovies" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsAdmin" Type="Boolean" />
+          <NavigationProperty Name="tblMovies" Relationship="Self.FK_tblMovies_User" FromRole="User" ToRole="tblMovies" />
+        </EntityType>
+        <Association Name="FK_tblMovies_tblProducers">
+          <End Role="tblProducers" Type="Self.tblProducer" Multiplicity="0..1" />
+          <End Role="tblMovies" Type="Self.tblMovy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProducers">
+              <PropertyRef Name="ProducerID" />
+            </Principal>
+            <Dependent Role="tblMovies">
+              <PropertyRef Name="Producer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMovies_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="tblMovies" Type="Self.tblMovy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="tblMovies">
+              <PropertyRef Name="review_by" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MoviesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblMovies" EntityType="Self.tblMovy" />
+          <EntitySet Name="tblProducers" EntityType="Self.tblProducer" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_tblMovies_tblProducers" Association="Self.FK_tblMovies_tblProducers">
+            <End Role="tblProducers" EntitySet="tblProducers" />
+            <End Role="tblMovies" EntitySet="tblMovies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMovies_User" Association="Self.FK_tblMovies_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="tblMovies" EntitySet="tblMovies" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MoviesModelStoreContainer" CdmEntityContainer="MoviesEntities">
+          <EntitySetMapping Name="tblMovies">
+            <EntityTypeMapping TypeName="MoviesModel.tblMovy">
+              <MappingFragment StoreEntitySet="tblMovies">
+                <ScalarProperty Name="MovieID" ColumnName="MovieID" />
+                <ScalarProperty Name="MovieName" ColumnName="MovieName" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Producer" ColumnName="Producer" />
+                <ScalarProperty Name="genre" ColumnName="genre" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="review_by" ColumnName="review_by" />
+                <ScalarProperty Name="user_review" ColumnName="user_review" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblProducers">
+            <EntityTypeMapping TypeName="MoviesModel.tblProducer">
+              <MappingFragment StoreEntitySet="tblProducers">
+                <ScalarProperty Name="ProducerID" ColumnName="ProducerID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="NumberOfMovies" ColumnName="NumberOfMovies" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="MoviesModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

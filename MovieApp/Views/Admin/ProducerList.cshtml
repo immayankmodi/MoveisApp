@@ -1,0 +1,70 @@
+﻿@model PagedList.IPagedList<MovieApp.DataModel.tblProducer>
+@using PagedList.Mvc;
+@using PagedList;
+<link href="~/Content/PagedList.css" rel="stylesheet" />
+
+
+@{
+    ViewBag.Title = "Movies | Producer List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="bodycontent">
+    <h2>Producers</h2>
+    <hr />
+
+    @using (Html.BeginForm("ProducerList", "Admin", FormMethod.Get)) {
+        <div style="display:inline-block;">
+            Search Name: @Html.TextBox("searchText", ViewBag.FilterValue as string)
+            <input type="submit" value="Find" />
+        </div>
+            <div style="display:inline-block; float:right;">
+                @Html.ActionLink("Create", "CreateProducer", "Admin", null)
+            </div>
+    }
+
+    <table class="table table-striped">
+
+        @if (Model != null && Model.Count() > 0) {
+            <thead>
+                <tr>
+                    <th>@Html.ActionLink("First Name", "ProducerList", "Admin", new { sortingOrder = "FirstName", sortingDir = ((ViewBag.sortingDir == "ASC") ? "DESC" : "ASC"), filterValue = ViewBag.FilterValue }, null)</th>
+                    <th>@Html.ActionLink("Last Name", "ProducerList", "Admin", new { sortingOrder = "LastName", sortingDir = ((ViewBag.sortingDir == "ASC") ? "DESC" : "ASC"), filterValue = ViewBag.FilterValue }, null)</th>
+                    <th>@Html.ActionLink("Date Of Birth", "ProducerList", "Admin", new { sortingOrder = "DateOfBirth", sortingDir = ((ViewBag.sortingDir == "ASC") ? "DESC" : "ASC"), filterValue = ViewBag.FilterValue }, null)</th>
+                    <th>@Html.ActionLink("# Of Movies", "ProducerList", "Admin", new { sortingOrder = "NumberOfMovies", sortingDir = ((ViewBag.sortingDir == "ASC") ? "DESC" : "ASC"), filterValue = ViewBag.FilterValue }, null)</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+                <tbody>
+                    @foreach (var producer in Model) {
+                        <tr>
+                            <td>@producer.FirstName</td>
+                            <td>@producer.LastName</td>
+                            @if (producer.DateOfBirth.HasValue) {
+                                <td>
+                                    @producer.DateOfBirth.Value.ToString("dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)
+                                </td>
+                            } else {
+                                <td>&nbsp;</td>
+                            }
+                            <td>@producer.NumberOfMovies</td>
+                            <td>
+                                @Html.ActionLink("Edit", "EditProducer", "Admin", new { id = producer.ProducerID }, null) &nbsp;
+                                @Html.ActionLink("Delete", "DeleteProducer", "Admin", new { id = producer.ProducerID }, new { onclick = "return confirm('Are you sure to delete this Producer ?');" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+        } else {
+            <tbody>
+                <tr>
+                    <td colspan="4">No producer(s) created yet!</td>
+                </tr>
+            </tbody>
+        }
+
+    </table>
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @Html.PagedListPager(Model, pageNo => Url.Action("ProducerList", new { pageNo, sortingOrder = ViewBag.CurrentSortOrder, sortingDir = ViewBag.sortingDir, filterValue = ViewBag.FilterValue }))
+</div>

@@ -1,0 +1,59 @@
+﻿@model MovieApp.Models.MovieModel
+
+@{
+    ViewBag.Title = "Movies | Create Movie";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="bodycontent">
+    <h2>Create Movie</h2>
+    <hr />
+    @using (Html.BeginForm()) {
+        @Html.HiddenFor(u => u.MovieID)
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.LabelFor(u => u.MovieName, new { @for = "moviename" })
+                @Html.TextBoxFor(u => u.MovieName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(u => u.MovieName)
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.LabelFor(u => u.Year, new { @for = "year" })
+                @Html.TextBoxFor(u => u.Year, new { @class = "form-control" })
+                @Html.ValidationMessageFor(u => u.Year)
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.LabelFor(u => u.Producer, new { @for = "Producer" })
+                @Html.DropDownListFor(m => m.Producer, Model.Producers, new { @class = "form-control" })
+                @Html.ValidationMessageFor(u => u.Producer)
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.LabelFor(u => u.Genre, new { @for = "Genre" })
+                @Html.TextBoxFor(u => u.Genre, new { @class = "form-control" })
+                @Html.ValidationMessageFor(u => u.Genre)
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.LabelFor(u => u.Title, new { @for = "Title" })
+                @Html.TextBoxFor(u => u.Title, new { @class = "form-control" })
+                @Html.ValidationMessageFor(u => u.Title)
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-success" />
+            </div>
+        </div>
+    }
+</div>

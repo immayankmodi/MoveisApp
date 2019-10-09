@@ -1,0 +1,65 @@
+﻿@model PagedList.IPagedList<MovieApp.DataModel.User>
+@using PagedList.Mvc;
+@using PagedList;
+<link href="~/Content/PagedList.css" rel="stylesheet" />
+
+
+@{
+    ViewBag.Title = "Movies | User List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="bodycontent">
+    <h2>Users</h2>
+    <hr />
+
+    @using (Html.BeginForm("UserList", "Admin", FormMethod.Get)) {
+        <div style="display:inline-block;">
+            Search Name: @Html.TextBox("searchText", ViewBag.FilterValue as string)
+            <input type="submit" value="Find" />
+        </div>
+            <div style="display:inline-block; float:right;">
+                @Html.ActionLink("Create", "CreateUser", "Admin", null)
+            </div>
+    }
+
+    <table class="table table-striped">
+
+        @if (Model != null && Model.Count() > 0) {
+            <thead>
+                <tr>
+                    <th>@Html.ActionLink("Name", "UserList", "Admin", new { sortingOrder = "Name", sortingDir = ((ViewBag.sortingDir == "ASC") ? "DESC" : "ASC"), filterValue = ViewBag.FilterValue }, null)</th>
+                    <th>@Html.ActionLink("Email", "UserList", "Admin", new { sortingOrder = "Email", sortingDir = ((ViewBag.sortingDir == "ASC") ? "DESC" : "ASC"), filterValue = ViewBag.FilterValue }, null)</th>
+                    <th>@Html.ActionLink("Address", "UserList", "Admin", new { sortingOrder = "Address", sortingDir = ((ViewBag.sortingDir == "ASC") ? "DESC" : "ASC"), filterValue = ViewBag.FilterValue }, null)</th>
+                    <th>@Html.ActionLink("Password", "UserList", "Admin", new { sortingOrder = "Password", sortingDir = ((ViewBag.sortingDir == "ASC") ? "DESC" : "ASC"), filterValue = ViewBag.FilterValue }, null)</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+                <tbody>
+                    @foreach (var user in Model) {
+                        <tr>
+                            <td>@user.Name</td>
+                            <td>@user.Email</td>
+                            <td>@user.Address</td>
+                            <td>@user.Password</td>
+                            <td>
+                                @Html.ActionLink("Edit", "EditUser", "Admin", new { id = user.UserId }, null)&nbsp;
+                                @Html.ActionLink("Delete", "DeleteUser", "Admin", new { id = user.UserId }, new { onclick = "return confirm('Are you sure to delete this User ?');" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+        } else {
+            <tbody>
+                <tr>
+                    <td colspan="4">No user(s) created yet!</td>
+                </tr>
+            </tbody>
+        }
+
+    </table>
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @Html.PagedListPager(Model, pageNo => Url.Action("UserList", new { pageNo, sortingOrder = ViewBag.CurrentSortOrder, sortingDir = ViewBag.sortingDir, filterValue = ViewBag.FilterValue }))
+</div>
+

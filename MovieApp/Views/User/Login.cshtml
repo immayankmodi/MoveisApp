@@ -1,0 +1,36 @@
+﻿@model MovieApp.Models.UserModel
+
+@{
+    ViewBag.Title = "Movies | User Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="bodycontent">
+    <h2>Login</h2>
+    <hr />
+    @using (Html.BeginForm()) {
+        @*@Html.ValidationSummary(true, "Login failed.");*@
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.LabelFor(u => u.EmailId, new { @for = "email" })
+                @Html.TextBoxFor(u => u.EmailId, new { @class = "form-control", @id = "email" })
+                @Html.ValidationMessageFor(u => u.EmailId)
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-4">
+            <div class="form-group">
+                @Html.LabelFor(u => u.Password, new { @for = "password" })
+                @Html.PasswordFor(u => u.Password, new { @class = "form-control", @id = "password" })
+                @Html.ValidationMessageFor(u => u.Password)
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="submit" value="Login" class="btn btn-success" />
+                @*@Html.ActionLink("Forget Password?", "ForgetPassword", "User", null, new { @class = "col-md-offset-3" })*@
+            </div>
+        </div>
+    }
+</div>

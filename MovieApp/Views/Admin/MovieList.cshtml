@@ -1,0 +1,65 @@
+﻿@model PagedList.IPagedList<MovieApp.Models.MovieModel>
+@using PagedList.Mvc;
+@using PagedList;
+<link href="~/Content/PagedList.css" rel="stylesheet" />
+
+
+@{
+    ViewBag.Title = "Movies | Movie List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="bodycontent">
+    <h2>Movies</h2>
+    <hr />
+
+    @using (Html.BeginForm("MovieList", "Admin", FormMethod.Get)) {
+        <div style="display:inline-block;">
+            Search Name: @Html.TextBox("searchText", ViewBag.FilterValue as string)
+            <input type="submit" value="Find" />
+        </div>
+            <div style="display:inline-block; float:right;">
+                @Html.ActionLink("Create", "CreateMovie", "Admin", null)
+            </div>
+    }
+
+    <table class="table table-striped">
+
+        @if (Model != null && Model.Count() > 0) {
+            <thead>
+                <tr>
+                    <th>@Html.ActionLink("Movie Name", "MovieList", "Admin", new { sortingOrder = "MovieName", sortingDir = ((ViewBag.sortingDir == "ASC") ? "DESC" : "ASC"), filterValue = ViewBag.FilterValue }, null)</th>
+                    <th>@Html.ActionLink("Year", "MovieList", "Admin", new { sortingOrder = "Year", sortingDir = ((ViewBag.sortingDir == "ASC") ? "DESC" : "ASC"), filterValue = ViewBag.FilterValue }, null)</th>
+                    <th>@Html.ActionLink("Producer Name", "MovieList", "Admin", new { sortingOrder = "ProducerName", sortingDir = ((ViewBag.sortingDir == "ASC") ? "DESC" : "ASC"), filterValue = ViewBag.FilterValue }, null)</th>
+                    <th>@Html.ActionLink("Genre", "MovieList", "Admin", new { sortingOrder = "Genre", sortingDir = ((ViewBag.sortingDir == "ASC") ? "DESC" : "ASC"), filterValue = ViewBag.FilterValue }, null)</th>
+                    <th>@Html.ActionLink("Title", "MovieList", "Admin", new { sortingOrder = "title", sortingDir = ((ViewBag.sortingDir == "ASC") ? "DESC" : "ASC"), filterValue = ViewBag.FilterValue }, null)</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+                <tbody>
+                    @foreach (var movie in Model) {
+                        <tr>
+                            <td>@movie.MovieName</td>
+                            <td>@movie.Year</td>
+                            <td>@movie.ProducerName</td>
+                            <td>@movie.Genre</td>
+                            <td>@movie.Title</td>
+                            <td>
+                                @Html.ActionLink("Edit", "EditMovie", "Admin", new { id = movie.MovieID }, null) &nbsp;
+                                @Html.ActionLink("Delete", "DeleteMovie", "Admin", new { id = movie.MovieID }, new { onclick = "return confirm('Are you sure to delete this Movie ?');" })
+                        </tr>
+                    }
+                </tbody>
+        } else {
+            <tbody>
+                <tr>
+                    <td colspan="4">No movie(s) created yet!</td>
+                </tr>
+            </tbody>
+        }
+
+    </table>
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @Html.PagedListPager(Model, pageNo => Url.Action("MovieList", new { pageNo, sortingOrder = ViewBag.CurrentSortOrder, sortingDir = ViewBag.sortingDir, filterValue = ViewBag.FilterValue }))
+</div>
